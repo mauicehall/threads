@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黑暗時代裡的那些星星 — Maurice Hall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=Cormorant+Garamond:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf7f2;
+  --paper: #fffdf9;
+  --text: #2a2825;
+  --muted: #8a8178;
+  --accent: #a18c73;
+  --line: #e8e0d5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Serif TC", serif;
+  font-size: 17px;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: #e9e0d1; }
+
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* Cover */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 6vh 2rem;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at top, #fffefb 0%, var(--bg) 60%);
+}
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: twinkle 4s infinite ease-in-out;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+.cover h1 {
+  font-size: clamp(2.4rem, 7vw, 3.6rem);
+  font-weight: 600;
+  margin: 0 0 1rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+}
+.subtitle {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  color: var(--muted);
+  margin: 0 0 3rem;
+  letter-spacing: 0.02em;
+}
+.author {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.1em;
+}
+.cover-quote {
+  font-size: 1.05rem;
+  color: var(--text);
+  margin: 2rem 0 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  max-width: 480px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 3vh;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  animation: float 2.5s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+/* TOC */
+.toc {
+  position: sticky;
+  top: 0;
+  background: rgba(250,247,242,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  z-index: 50;
+  padding: 0.75rem 1rem;
+}
+.toc-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.toc-inner::-webkit-scrollbar { display: none; }
+.toc a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.toc a:hover { color: var(--text); }
+
+/* Book */
+.book {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6rem;
+}
+section {
+  margin: 5rem 0;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+section.visible { opacity: 1; transform: none; }
+
+h2 {
+  font-size: 1.65rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+h2 .num {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.15em;
+}
+.date {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+  font-family: "Cormorant Garamond", serif;
+  letter-spacing: 0.05em;
+}
+
+p { margin: 0 0 1.4em; text-align: justify; }
+.dropcap p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.2em;
+  line-height: 0.8;
+  margin: 0.12em 0.15em 0 0;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: "Noto Serif TC", serif;
+}
+
+.star-divider {
+  text-align: center;
+  margin: 3.5rem 0 3rem;
+  color: var(--accent);
+  opacity: 0.5;
+  font-size: 1.1rem;
+  letter-spacing: 1.2em;
+  user-select: none;
+}
+.page-number {
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 3rem;
+  opacity: 0.7;
+}
+
+/* Letter quote */
+.letter {
+  margin: 2.5rem 0;
+  padding: 1.8rem 1.5rem 1.8rem 1.8rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+}
+.letter .source {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+.letter p { margin-bottom: 1em; }
+
+/* Postscript */
+.postscript {
+  font-style: italic;
+}
+.postscript .date-en {
+  font-family: "Cormorant Garamond", serif;
+  color: var(--muted);
+  font-style: normal;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  border-top: 1px solid var(--line);
+  margin-top: 4rem;
+}
+.dedication {
+  font-size: 1rem;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+.colophon {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.theme-toggle {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: grid; place-items: center;
+  cursor: pointer;
+  color: var(--muted);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all 0.2s;
+  z-index: 90;
+}
+.theme-toggle:hover { color: var(--text); transform: translateY(-2px); }
+
+@media (min-width: 768px) {
+  body { font-size: 18px; }
+  .book { padding: 6rem 2rem 8rem; }
+  .letter { padding: 2rem 2.5rem 2rem 2.2rem; }
+}
+
+/* Dark mode */
+html.dark {
+  --bg: #1c1b19;
+  --paper: #23211e;
+  --text: #e8e2d6;
+  --muted: #a39a8f;
+  --accent: #c4ad8f;
+  --line: #3a3631;
+}
+html.dark .cover { background: radial-gradient(ellipse at top, #25231f 0%, var(--bg) 60%); }
+html.dark .toc { background: rgba(28,27,25,0.9); }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<button class="theme-toggle" id="theme" aria-label="切換夜讀模式" title="夜讀">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+</button>
+
+<header class="cover" id="cover">
+  <div class="stars" id="stars"></div>
+  <h1>黑暗時代裡的那些星星</h1>
+  <p class="subtitle">Maurice Hall's Secret Garden — 同志大叔冷眼集選</p>
+  <div class="author">mauricehalltw</div>
+  <blockquote class="cover-quote">我對全世界都可以假裝，但我從來不騙我自己。</blockquote>
+  <div class="scroll-hint">往下閱讀 ↓</div>
+</header>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#intro">引言</a>
+    <a href="#s1">滿天裏亮晶晶的星星</a>
+    <a href="#s2">孽子</a>
+    <a href="#s3">人間雜誌</a>
+    <a href="#s4">一曲情未了</a>
+    <a href="#postscript">跋</a>
+    <a href="#dream">後記</a>
+  </div>
+</nav>
+
+<main class="book">
+  <section id="intro" class="dropcap">
+    <h2><span class="num">PROLOGUE</span>引言</h2>
+    <p>大學時期認知自己是同志之後，內心是非常恐懼害怕的。當時同志資訊不但非常少，而且大多是負面的。這樣的社會氛圍，讓自己覺得是異類，不容於這個「正常」世界。還記得在輾轉難眠的夜晚，望著窗外皎潔的月亮及星星，想到徬徨又無人可訴說的未來，就不禁潸然淚下。</p>
+    <p>我流連於圖書館翻查書籍，試圖找出自己的人生定位，這過程是漫長而艱辛的，直到過了不惑之年，對自我認同的底氣才算完備。感謝在黑暗時代裡，那些指引我人生道路的貴人，無論他們是以小說、雜誌、電影、廣播或其他媒體型式展示。</p>
+    <div class="page-number">— 1 —</div>
+  </section>
+
+  <div class="star-divider">✦ ✦ ✦</div>
+
+  <section id="s1">
+    <h2><span class="num">一</span>滿天裏亮晶晶的星星</h2>
+    <div class="date">2025-3-30</div>
+    <p>《滿天裏亮晶晶的星星》收錄於白先勇《台北人》，算是長篇小說《孽子》之濫觴。文章主角「教主」，「每次總要等到滿天裏那些亮晶晶的星星，一顆一顆，漸漸黯淡下去的時分，他才靠在新公園荷花池邊的石欄杆上，開始對我們訴說起他的那些故事來。」</p>
+    <p>不過對我而言，星星卻象徵在那個黑暗年代裡，一顆顆遙不可及，卻承載著眾多同志對不可知未來之命運指引。</p>
+    <div class="page-number">— 2 —</div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="num">二</span>《孽子》</h2>
+    <div class="date">2025-4-5</div>
+    <p>「寫給那一群，在最深最深的黑夜裏，獨自彷徨街頭，無所依歸的孩子們。」</p>
+    <p>在保守80年代，《孽子》在文學界橫空出世。我在大學閱讀時，由於人生歷練不足，覺得有點生澀難懂。不過隨著自我認同建立，逐漸了解作家白先勇在小說中，所欲呈現悲天憫人之普世價值。</p>
+    <p>小說當然有其影響力，但讓《孽子》為一般大眾所知，卻是改編後的影視作品。</p>
+    <p>1986年由虞戡平導演之電影《孽子》，我只能說是生錯時代，在當時電檢制度之下，實在很難充分表現作品的原意。</p>
+    <p>真正讓其大放異彩，是2003年由曹瑞原導演，公視推出之電視劇集。這部電視劇讓同志議題進入家中客廳，以當時社會氛圍，用石破天驚來比喻毫不為過。首播時我還與家人同住，連坦然觀看的勇氣都沒有，只能趁無人在旁時切換頻道收看。還好公視後來多次重播，我才完整看完全集。</p>
+    <p>聽起來很荒謬，卻是我之前的真實寫照。</p>
+    <p>感謝公視，讓同志議題不再是禁忌，而能以正面方式呈現，擺脫妖魔化的標籤，可說是重要的里程碑。</p>
+    <p>在《孽子》出版四十多年後，看著現今同志可以在陽光下展現自我，劇中主角「阿青」應該也會覺得欣慰吧！</p>
+    <div class="page-number">— 3 —</div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="num">三</span>《人間》雜誌</h2>
+    <div class="date">2025-6-11</div>
+    <p>在解嚴前後的時空，《人間》有如流星劃過夜空，讓讀者對當時芸芸眾生有更多瞭解。《人間》內容多元又有深度，其展現的人文關懷，相信感動過無數人們，個人也深受其啟發。</p>
+    <p>《人間》勇於挑戰禁忌，刊出三期同志相關專題報導：分別是第7期「不敢說出口的愛」，第19期「AIDS 世紀的疫癘」以及第33期「禁忌的告白」。《人間》可說是我大學時期的精神導師，它讓我知道自己並不孤單，對我後來的人生道路影響非常深遠。</p>
+    <p>第33期採訪當年才三十歲的同志運動先驅祁家威，回看他所做的一切，必須說非常佩服其勇氣，他也為後來同志運動奠定了基礎。</p>
+    <p>但最觸動我的文章，則是另一位男同志的自述，他稱呼當時同志為「禁色的花朵」。儘管他抱著「結婚」的想法，在新公園、酒吧、三溫暖等場所尋尋覓覓，卻始終一無所獲。那時的花朵欠缺社會規範之合法照耀，使它原本自然的內在生命遭受嚴重的扭曲與扼殺。</p>
+    <p>現今同志比較幸運，已受到法律上的保障，但想要找到合適伴侶，仍是一件不容易的事。或許要等到「出櫃」不再是同志的緊箍咒，情感上才能跟異性戀者一樣，從內心綻放出健康燦爛的花朵吧！</p>
+    <div class="page-number">— 4 —</div>
+  </section>
+
+  <section id="s4">
+    <h2><span class="num">四</span>《一曲情未了》</h2>
+    <div class="date">2025-9-18</div>
+    <p>除了電視，廣播過往也是具有影響力的主流媒體。然而在那個時期，同志彷彿是隱形的，根本不存在。</p>
+    <p>服兵役那段日子有點苦悶，聽廣播是重要的娛樂及資訊來源。1993年，警廣周日晚間播出的《一曲情未了》，意外成為同志族群發聲的管道。</p>
+    <p>該節目是以一首歌曲搭配聽眾來信，由主持人在空中傳達不同的心情故事。隨著首次在節目講述一位同志的心聲，節目就不斷收到來自各地同志的信件。主持人原本對同志並無接觸，在深受感動之下，每周固定播出同志來信內容。</p>
+    <p>這節目當時對我而言是個救贖，也是我的精神食糧。每周日晚上收假回部隊之後，收聽廣播變成我的例行功課。儘管故事內容以悲情居多，但在保守時空環境下，同志擁有發聲機會就已經很難得。可惜的是，在上級單位壓力之下，節目在一年後無預警停播了。</p>
+    <p>停播之後我悵然若失，那也是我即將服完兵役，北上工作進入社會的時期。當時覺得人生很迷惘，加上性向認同壓力，不知自己未來該如何走下去。</p>
+    <p>但回想起來，還是要非常感謝這個節目的製播。它就像是暗黑裡的一道微光，讓我有勇氣繼續前行，如今成長茁壯。</p>
+    <div class="page-number">— 5 —</div>
+  </section>
+
+  <div class="star-divider">✦ ✦ ✦</div>
+
+  <section id="postscript">
+    <h2><span class="num">跋</span>兩盞最初的燈</h2>
+    <p>能有這樣正面態度，我必須歸功於一篇文章及一部電影。</p>
+    <p>大叔是個晚熟的人，到了大學才開始尋求自我認同。以前關於同志資訊少得可憐，能有正面啟發的更是鳳毛麟角。我為了尋求個人定位，每天泡在圖書館裡，所有相關心理書籍及雜誌幾乎都翻遍了。</p>
+    <p>現已停刊的《人間》，是本關懷人文的好雜誌，它曾刊登一篇文章《寫給阿青的一封信》，由作家白先勇所發表。我讀完之後熱淚盈眶，覺得自己不再孤單，因為這世間還是有人瞭解你的。而1987年上映的《墨利斯的情人》，是我看過第一部真正的同志電影，它讓我相信同性之愛也可以很美好，只要你勇於追求的話。</p>
+
+    <div class="letter">
+      <div class="source">—— 白先勇《寫給阿青的一封信》</div>
+      <p>阿青，也許天長地久可以做如此解，你一生中只要有那麼一刻，你全心投入去愛過一個人，那一刻也就是永恆。你一生中有那麼一段路，有一個人與你互相扶持，共禦風雨，那麼那一段也就勝過終生了。有的孩子因為感情上受了傷，變得憤世嫉俗，玩世不恭起來，他們不尊重自己的感情，當然也就不會尊重別人的。最後他們傷人傷己，心靈變得枯竭早衰，把寶貴的青春任意揮霍掉。阿青，我希望你不會變得如此，即使你的感情受到挫折。你不要忘了，只要你動過心，愛過別人，你的人生就更深厚了一層，豐富了一層。人生最大的悲哀不是失戀，而是沒能真正愛過一個人。</p>
+    </div>
+    <div class="page-number">— 6 —</div>
+  </section>
+
+  <section id="dream" class="postscript">
+    <h2><span class="num">後記</span>2009年的夢</h2>
+    <div class="date-en">2009/2/15</div>
+    <p>一直以來，在兩個人的曖昧關係中，我總是比較在乎對方。我好像也是比較喜歡對方，付出也是比較多。並不是計較誰付出的多少，只是感嘆於自己的一廂情願。</p>
+    <p>希望有一天，我能遇見一個人。我們彼此喜歡，然而他喜歡我比我喜歡他多一點。我們彼此照顧，然而他照顧我比我照顧他多一點。我們彼此在乎，然而他在乎我比我在乎他多一點。只要多一點就好......</p>
+    <p>I have a dream.</p>
+    <div class="page-number">— 7 —</div>
+  </section>
+</main>
+
+<footer>
+  <div class="dedication">2024-2026，台北。獻給從未背叛自己的你。</div>
+  <div class="colophon">Maurice Hall's Secret Garden</div>
+</footer>
+
+<script>
+// stars
+const starsContainer = document.getElementById('stars');
+for(let i=0;i<60;i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*100+'%';
+  s.style.animationDelay = (Math.random()*4)+'s';
+  s.style.opacity = Math.random()*0.5+0.2;
+  starsContainer.appendChild(s);
+}
+
+// progress
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', ()=>{
+  const h = document.documentElement;
+  const scrolled = (h.scrollTop)/(h.scrollHeight - h.clientHeight);
+  progress.style.width = (scrolled*100)+'%';
+});
+
+// reveal
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{ threshold: 0.15 });
+document.querySelectorAll('section').forEach(s=>observer.observe(s));
+
+// theme
+const themeBtn = document.getElementById('theme');
+const saved = localStorage.getItem('mh-theme');
+if(saved==='dark') document.documentElement.classList.add('dark');
+themeBtn.addEventListener('click', ()=>{
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('mh-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+});
+</script>
+</body>
+</html>
